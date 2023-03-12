@@ -9,26 +9,30 @@
           "$ref": "#/$defs/Pet"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "NamedPets is a map of animal names to pets."
     },
     "Pet": {
       "properties": {
         "name": {
           "type": "string",
-          "title": "Name"
+          "title": "Name",
+          "description": "Name of the animal."
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "name"
-      ]
+      ],
+      "description": "Pet defines the user's fury friend."
     },
     "Pets": {
       "items": {
         "$ref": "#/$defs/Pet"
       },
-      "type": "array"
+      "type": "array",
+      "description": "Pets is a collection of Pet objects."
     },
     "Plant": {
       "properties": {
@@ -41,7 +45,8 @@
       "type": "object",
       "required": [
         "variant"
-      ]
+      ],
+      "description": "Plant represents the plants the user might have and serves as a test of structs inside a `type` set."
     },
     "User": {
       "properties": {
