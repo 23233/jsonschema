@@ -1,17 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/23233/jsonschema/outer-ptr",
+  "$id": "https://github.com/23233/jsonschema/lookup-name",
   "properties": {
-    "Foo": {
-      "type": "string"
-    },
-    "Text": {
+    "surname": {
       "type": "string"
     }
   },
   "additionalProperties": false,
   "type": "object",
   "required": [
-    "Foo"
+    "surname"
   ]
 }

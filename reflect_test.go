@@ -15,7 +15,7 @@ import (
 
 	"github.com/iancoleman/orderedmap"
 
-	"github.com/invopop/jsonschema/examples"
+	"github.com/23233/jsonschema/examples"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -346,7 +346,7 @@ func TestReflectFromType(t *testing.T) {
 	typ := reflect.TypeOf(tu)
 
 	s := r.ReflectFromType(typ)
-	assert.EqualValues(t, "https://github.com/invopop/jsonschema/test-user", s.ID)
+	assert.EqualValues(t, "https://github.com/23233/jsonschema/test-user", s.ID)
 
 	x := struct {
 		Test string
@@ -465,6 +465,14 @@ func TestSchemaGeneration(t *testing.T) {
 		{ArrayType{}, &Reflector{}, "fixtures/array_type.json"},
 		{SchemaExtendTest{}, &Reflector{}, "fixtures/custom_type_extend.json"},
 		{Expression{}, &Reflector{}, "fixtures/schema_with_expression.json"},
+		{LookupName{}, &Reflector{
+			Intercept: func(field reflect.StructField) bool {
+				return field.Name != "Given"
+			},
+			DoNotReference:             true,
+			ExpandedStruct:             true,
+			RequiredFromJSONSchemaTags: false,
+		}, "fixtures/schema_intercept.json"},
 	}
 
 	for _, tt := range tests {
@@ -480,7 +488,7 @@ func TestSchemaGeneration(t *testing.T) {
 func prepareCommentReflector(t *testing.T) *Reflector {
 	t.Helper()
 	r := new(Reflector)
-	err := r.AddGoComments("github.com/invopop/jsonschema", "./examples")
+	err := r.AddGoComments("github.com/23233/jsonschema", "./examples")
 	require.NoError(t, err, "did not expect error while adding comments")
 	return r
 }
