@@ -22,3 +22,23 @@ func NewSchemaSetItems(typeName string) *Schema {
 	schema.Items = NewSchema(typeName)
 	return schema
 }
+
+func (t *Schema) IsObj() bool {
+	return t.Type == "object"
+}
+
+func (t *Schema) IsArray() bool {
+	return t.Type == "array"
+}
+
+func (t *Schema) IsNull() bool {
+	return t.Type == "null"
+}
+
+func (t *Schema) IsSpread() bool {
+	return !t.IsNormal()
+}
+
+func (t *Schema) IsNormal() bool {
+	return !t.IsObj() && !t.IsArray() && !t.IsNull()
+}
