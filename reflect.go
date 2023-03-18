@@ -416,6 +416,9 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 		panic("unsupported type " + t.String())
 	}
 
+	// 写入kind
+	st.AttachData["kind"] = t.Kind().String()
+
 	r.reflectSchemaExtend(definitions, t, st)
 
 	// Always try to reference the definition which may have just been created
