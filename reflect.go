@@ -417,6 +417,9 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	}
 
 	// 写入kind
+	if st.AttachData == nil {
+		st.AttachData = make(map[string]interface{})
+	}
 	st.AttachData["kind"] = t.Kind().String()
 
 	r.reflectSchemaExtend(definitions, t, st)
