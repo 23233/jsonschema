@@ -97,6 +97,9 @@ type Schema struct {
 	TT     string                 `json:"tt,omitempty" bson:"tt,omitempty"`         // 对title进行哪些操作 eg:upper
 	Date   *CustomDate            `json:"date,omitempty" bson:"date,omitempty"`     // 日期的定义
 
+	// 额外注入的内容
+	AttachData map[string]interface{} `json:"attach_data,omitempty" bson:"attach_data,omitempty"`
+
 	// Special boolean representation of the Schema - section 4.3.2
 	boolean *bool `bson:"boolean,omitempty"`
 }
