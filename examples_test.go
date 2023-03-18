@@ -67,8 +67,58 @@ func ExampleReflect() {
 	//            "kind": "string"
 	//          }
 	//        },
-	//        "friends": {
+	// 		"friends": {
 	//          "items": {
+	//            "type": "integer",
+	//            "attach_data": {
+	//              "kind": "int"
+	//            }
+	//          },
+	//          "type": "array",
+	//          "description": "The list of IDs, omitted when empty",
+	//          "attach_data": {
+	//            "kind": "slice"
+	//          }
+	//        },
+	//        "tags": {
+	//          "type": "object",
+	//          "attach_data": {
+	//            "kind": "map"
+	//          },
+	//          "a": "b",
+	//          "foo": [
+	//            "bar",
+	//            "bar1"
+	//          ]
+	//        },
+	//        "birth_date": {
+	//          "type": "string",
+	//          "format": "date-time",
+	//          "attach_data": {
+	//            "kind": "struct"
+	//          }
+	//        },
+	//        "year_of_birth": {
+	//          "type": "string",
+	//          "attach_data": {
+	//            "kind": "string"
+	//          }
+	//        },
+	//        "metadata": {
+	//          "oneOf": [
+	//            {
+	//              "type": "string"
+	//            },
+	//            {
+	//              "type": "array"
+	//            }
+	//          ],
+	//          "attach_data": {
+	//            "kind": "interface"
+	//          }
+	//        },
+	//        "fav_color": {
+	//          "type": "string",
 	//          "enum": [
 	//            "red",
 	//            "green",
