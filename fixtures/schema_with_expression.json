@@ -7,9 +7,6 @@
       "properties": {
         "value": {
           "type": "integer",
-          "attach_data": {
-            "kind": "int"
-          },
           "foo": "bar=='baz'"
         }
       },
@@ -17,10 +14,7 @@
       "type": "object",
       "required": [
         "value"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     }
   }
 }

@@ -13,10 +13,7 @@
       "type": "object",
       "required": [
         "slice"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     },
     "CustomSliceType": {
       "oneOf": [

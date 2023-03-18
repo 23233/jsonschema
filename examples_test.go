@@ -28,117 +28,87 @@ func ExampleReflect() {
 	fmt.Println(string(data))
 	// Output:
 	// {
-	//  "$schema": "https://json-schema.org/draft/2020-12/schema",
-	//  "$id": "https://github.com/23233/jsonschema_test/sample-user",
-	//  "$ref": "#/$defs/SampleUser",
-	//  "$defs": {
-	//    "SampleUser": {
-	//      "oneOf": [
-	//        {
-	//          "required": [
-	//            "birth_date"
-	//          ],
-	//          "title": "date"
-	//        },
-	//        {
-	//          "required": [
-	//            "year_of_birth"
-	//          ],
-	//          "title": "year"
-	//        }
-	//      ],
-	//      "properties": {
-	//        "id": {
-	//          "type": "integer",
-	//          "attach_data": {
-	//            "kind": "int"
-	//          }
-	//        },
-	//        "name": {
-	//          "type": "string",
-	//          "title": "the name",
-	//          "description": "The name of a friend",
-	//          "default": "alex",
-	//          "examples": [
-	//            "joe",
-	//            "lucy"
-	//          ],
-	//          "attach_data": {
-	//            "kind": "string"
-	//          }
-	//        },
-	// 		"friends": {
-	//          "items": {
-	//            "type": "integer",
-	//            "attach_data": {
-	//              "kind": "int"
-	//            }
-	//          },
-	//          "type": "array",
-	//          "description": "The list of IDs, omitted when empty",
-	//          "attach_data": {
-	//            "kind": "slice"
-	//          }
-	//        },
-	//        "tags": {
-	//          "type": "object",
-	//          "attach_data": {
-	//            "kind": "map"
-	//          },
-	//          "a": "b",
-	//          "foo": [
-	//            "bar",
-	//            "bar1"
-	//          ]
-	//        },
-	//        "birth_date": {
-	//          "type": "string",
-	//          "format": "date-time",
-	//          "attach_data": {
-	//            "kind": "struct"
-	//          }
-	//        },
-	//        "year_of_birth": {
-	//          "type": "string",
-	//          "attach_data": {
-	//            "kind": "string"
-	//          }
-	//        },
-	//        "metadata": {
-	//          "oneOf": [
-	//            {
-	//              "type": "string"
-	//            },
-	//            {
-	//              "type": "array"
-	//            }
-	//          ],
-	//          "attach_data": {
-	//            "kind": "interface"
-	//          }
-	//        },
-	//        "fav_color": {
-	//          "type": "string",
-	//          "enum": [
-	//            "red",
-	//            "green",
-	//            "blue"
-	//          ],
-	//          "attach_data": {
-	//            "kind": "string"
-	//          }
-	//        }
-	//      },
-	//      "additionalProperties": false,
-	//      "type": "object",
-	//      "required": [
-	//        "id",
-	//        "name"
-	//      ],
-	//      "attach_data": {
-	//        "kind": "struct"
-	//      }
-	//    }
-	//  }
-	//}
+	//   "$schema": "https://json-schema.org/draft/2020-12/schema",
+	//   "$id": "https://github.com/23233/jsonschema_test/sample-user",
+	//   "$ref": "#/$defs/SampleUser",
+	//   "$defs": {
+	//     "SampleUser": {
+	//       "oneOf": [
+	//         {
+	//           "required": [
+	//             "birth_date"
+	//           ],
+	//           "title": "date"
+	//         },
+	//         {
+	//           "required": [
+	//             "year_of_birth"
+	//           ],
+	//           "title": "year"
+	//         }
+	//       ],
+	//       "properties": {
+	//         "id": {
+	//           "type": "integer"
+	//         },
+	//         "name": {
+	//           "type": "string",
+	//           "title": "the name",
+	//           "description": "The name of a friend",
+	//           "default": "alex",
+	//           "examples": [
+	//             "joe",
+	//             "lucy"
+	//           ]
+	//         },
+	//         "friends": {
+	//           "items": {
+	//             "type": "integer"
+	//           },
+	//           "type": "array",
+	//           "description": "The list of IDs, omitted when empty"
+	//         },
+	//         "tags": {
+	//           "type": "object",
+	//           "a": "b",
+	//           "foo": [
+	//             "bar",
+	//             "bar1"
+	//           ]
+	//         },
+	//         "birth_date": {
+	//           "type": "string",
+	//           "format": "date-time"
+	//         },
+	//         "year_of_birth": {
+	//           "type": "string"
+	//         },
+	//         "metadata": {
+	//           "oneOf": [
+	//             {
+	//               "type": "string"
+	//             },
+	//             {
+	//               "type": "array"
+	//             }
+	//           ]
+	//         },
+	//         "fav_color": {
+	//           "type": "string",
+	//           "enum": [
+	//             "red",
+	//             "green",
+	//             "blue"
+	//           ]
+	//         }
+	//       },
+	//       "additionalProperties": false,
+	//       "type": "object",
+	//       "required": [
+	//         "id",
+	//         "name"
+	//       ]
+	//     }
+	//   }
+	// }
 }

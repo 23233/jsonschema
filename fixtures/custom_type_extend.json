@@ -7,26 +7,17 @@
       "properties": {
         "LastName": {
           "type": "string",
-          "description": "some extra words",
-          "attach_data": {
-            "kind": "string"
-          }
+          "description": "some extra words"
         },
         "middle_name": {
-          "type": "string",
-          "attach_data": {
-            "kind": "string"
-          }
+          "type": "string"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "LastName"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     }
   }
 }

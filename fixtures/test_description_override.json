@@ -7,31 +7,19 @@
       "properties": {
         "FirstName": {
           "type": "string",
-          "description": "test2",
-          "attach_data": {
-            "kind": "string"
-          }
+          "description": "test2"
         },
         "LastName": {
           "type": "string",
-          "description": "test3",
-          "attach_data": {
-            "kind": "string"
-          }
+          "description": "test3"
         },
         "age": {
           "type": "integer",
-          "description": "test4",
-          "attach_data": {
-            "kind": "uint"
-          }
+          "description": "test4"
         },
         "middle_name": {
           "type": "string",
-          "description": "test5",
-          "attach_data": {
-            "kind": "string"
-          }
+          "description": "test5"
         }
       },
       "additionalProperties": false,
@@ -40,10 +28,7 @@
         "FirstName",
         "LastName",
         "age"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     }
   }
 }

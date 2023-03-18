@@ -13,10 +13,7 @@
       "type": "object",
       "required": [
         "my_map"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     },
     "CustomMapType": {
       "items": {

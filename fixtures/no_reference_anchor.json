@@ -4,53 +4,32 @@
   "$anchor": "TestUser",
   "properties": {
     "id": {
-      "type": "integer",
-      "attach_data": {
-        "kind": "int"
-      }
+      "type": "integer"
     },
     "some_base_property": {
-      "type": "integer",
-      "attach_data": {
-        "kind": "int"
-      }
+      "type": "integer"
     },
     "grand": {
       "$anchor": "GrandfatherType",
       "properties": {
         "family_name": {
-          "type": "string",
-          "attach_data": {
-            "kind": "string"
-          }
+          "type": "string"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "family_name"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     },
     "SomeUntaggedBaseProperty": {
-      "type": "boolean",
-      "attach_data": {
-        "kind": "bool"
-      }
+      "type": "boolean"
     },
     "PublicNonExported": {
-      "type": "integer",
-      "attach_data": {
-        "kind": "int"
-      }
+      "type": "integer"
     },
     "MapType": {
-      "type": "object",
-      "attach_data": {
-        "kind": "map"
-      }
+      "type": "object"
     },
     "name": {
       "type": "string",
@@ -64,84 +43,48 @@
       "examples": [
         "joe",
         "lucy"
-      ],
-      "attach_data": {
-        "kind": "string"
-      }
+      ]
     },
     "password": {
       "type": "string",
-      "writeOnly": true,
-      "attach_data": {
-        "kind": "string"
-      }
+      "writeOnly": true
     },
     "friends": {
       "items": {
-        "type": "integer",
-        "attach_data": {
-          "kind": "int"
-        }
+        "type": "integer"
       },
       "type": "array",
-      "description": "list of IDs, omitted when empty",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "description": "list of IDs, omitted when empty"
     },
     "tags": {
       "patternProperties": {
         ".*": {
-          "type": "string",
-          "attach_data": {
-            "kind": "string"
-          }
+          "type": "string"
         }
       },
-      "type": "object",
-      "attach_data": {
-        "kind": "map"
-      }
+      "type": "object"
     },
     "options": {
-      "type": "object",
-      "attach_data": {
-        "kind": "map"
-      }
+      "type": "object"
     },
     "TestFlag": {
-      "type": "boolean",
-      "attach_data": {
-        "kind": "bool"
-      }
+      "type": "boolean"
     },
     "TestFlagFalse": {
       "type": "boolean",
-      "default": false,
-      "attach_data": {
-        "kind": "bool"
-      }
+      "default": false
     },
     "TestFlagTrue": {
       "type": "boolean",
-      "default": true,
-      "attach_data": {
-        "kind": "bool"
-      }
+      "default": true
     },
     "birth_date": {
       "type": "string",
-      "format": "date-time",
-      "attach_data": {
-        "kind": "struct"
-      }
+      "format": "date-time"
     },
     "website": {
       "type": "string",
-      "format": "uri",
-      "attach_data": {
-        "kind": "struct"
-      }
+      "format": "uri"
     },
     "network_address": {
       "type": "string",
@@ -149,17 +92,11 @@
     },
     "photo": {
       "type": "string",
-      "contentEncoding": "base64",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "contentEncoding": "base64"
     },
     "photo2": {
       "type": "string",
-      "contentEncoding": "base64",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "contentEncoding": "base64"
     },
     "feeling": {
       "oneOf": [
@@ -176,30 +113,18 @@
       "maximum": 120,
       "exclusiveMaximum": true,
       "minimum": 18,
-      "exclusiveMinimum": true,
-      "attach_data": {
-        "kind": "int"
-      }
+      "exclusiveMinimum": true
     },
     "email": {
       "type": "string",
-      "format": "email",
-      "attach_data": {
-        "kind": "string"
-      }
+      "format": "email"
     },
     "uuid": {
       "type": "string",
-      "format": "uuid",
-      "attach_data": {
-        "kind": "string"
-      }
+      "format": "uuid"
     },
     "Baz": {
       "type": "string",
-      "attach_data": {
-        "kind": "string"
-      },
       "foo": [
         "bar",
         "bar1"
@@ -208,9 +133,6 @@
     },
     "bool_extra": {
       "type": "string",
-      "attach_data": {
-        "kind": "string"
-      },
       "isFalse": false,
       "isTrue": true
     },
@@ -220,10 +142,7 @@
         "red",
         "green",
         "blue"
-      ],
-      "attach_data": {
-        "kind": "string"
-      }
+      ]
     },
     "rank": {
       "type": "integer",
@@ -231,10 +150,7 @@
         1,
         2,
         3
-      ],
-      "attach_data": {
-        "kind": "int"
-      }
+      ]
     },
     "mult": {
       "type": "number",
@@ -242,10 +158,7 @@
         1,
         1.5,
         2
-      ],
-      "attach_data": {
-        "kind": "float64"
-      }
+      ]
     },
     "roles": {
       "items": {
@@ -254,15 +167,9 @@
           "admin",
           "moderator",
           "user"
-        ],
-        "attach_data": {
-          "kind": "string"
-        }
+        ]
       },
-      "type": "array",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "type": "array"
     },
     "priorities": {
       "items": {
@@ -271,15 +178,9 @@
           -1,
           0,
           1
-        ],
-        "attach_data": {
-          "kind": "int"
-        }
+        ]
       },
-      "type": "array",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "type": "array"
     },
     "offsets": {
       "items": {
@@ -288,26 +189,12 @@
           1.570796,
           3.141592,
           6.283185
-        ],
-        "attach_data": {
-          "kind": "float64"
-        }
+        ]
       },
-      "type": "array",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "type": "array"
     },
-    "anything": {
-      "attach_data": {
-        "kind": "interface"
-      }
-    },
-    "raw": {
-      "attach_data": {
-        "kind": "slice"
-      }
-    }
+    "anything": true,
+    "raw": true
   },
   "additionalProperties": false,
   "type": "object",
@@ -328,8 +215,5 @@
     "color",
     "roles",
     "raw"
-  ],
-  "attach_data": {
-    "kind": "struct"
-  }
+  ]
 }

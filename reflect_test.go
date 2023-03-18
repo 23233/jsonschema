@@ -472,6 +472,9 @@ func TestSchemaGeneration(t *testing.T) {
 			ExpandedStruct:             true,
 			RequiredFromJSONSchemaTags: false,
 		}, "fixtures/schema_intercept.json"},
+		{LookupName{}, &Reflector{
+			OpenAttach: true,
+		}, "fixtures/config_open_attach.json"},
 	}
 
 	for _, tt := range tests {

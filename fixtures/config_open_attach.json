@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/23233/jsonschema/lookup-name",
+  "$ref": "#/$defs/LookupName",
+  "$defs": {
+    "LookupName": {
+      "additionalProperties": false,
+      "attach_data": {
+        "kind": "struct"
+      },
+      "properties": {
+        "first": {
+          "attach_data": {
+            "kind": "string"
+          },
+          "type": "string"
+        },
+        "surname": {
+          "attach_data": {
+            "kind": "string"
+          },
+          "type": "string"
+        }
+      },
+      "required": [
+        "first",
+        "surname"
+      ],
+      "type": "object"
+    }
+  }
+}

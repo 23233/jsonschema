@@ -5,28 +5,19 @@
     "Inner": {
       "properties": {
         "Foo": {
-          "type": "string",
-          "attach_data": {
-            "kind": "string"
-          }
+          "type": "string"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "Foo"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     }
   },
   "properties": {
     "text": {
-      "type": "string",
-      "attach_data": {
-        "kind": "string"
-      }
+      "type": "string"
     },
     "inner": {
       "$ref": "#/$defs/Inner"
@@ -36,8 +27,5 @@
   "type": "object",
   "required": [
     "inner"
-  ],
-  "attach_data": {
-    "kind": "struct"
-  }
+  ]
 }

@@ -5,15 +5,9 @@
   "$defs": {
     "ArrayType": {
       "items": {
-        "type": "string",
-        "attach_data": {
-          "kind": "string"
-        }
+        "type": "string"
       },
-      "type": "array",
-      "attach_data": {
-        "kind": "slice"
-      }
+      "type": "array"
     }
   }
 }

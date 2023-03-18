@@ -17,10 +17,7 @@
       "type": "object",
       "required": [
         "CreatedAt"
-      ],
-      "attach_data": {
-        "kind": "struct"
-      }
+      ]
     }
   }
 }

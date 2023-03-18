@@ -237,6 +237,10 @@ type Reflector struct {
 	//
 	// See also: AddGoComments
 	CommentMap map[string]string
+
+	// OpenAttach 开启额外的attach data生成
+	// 目前只有kind会生成
+	OpenAttach bool
 }
 
 // Reflect reflects to Schema from a value.
@@ -417,10 +421,11 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	}
 
 	// 写入kind
-	if st.AttachData == nil {
-		st.AttachData = make(map[string]interface{})
+	if r.OpenAttach {
+		st.AttachData = map[string]interface{}{
+			"kind": t.Kind().String(),
+		}
 	}
-	st.AttachData["kind"] = t.Kind().String()
 
 	r.reflectSchemaExtend(definitions, t, st)
 
