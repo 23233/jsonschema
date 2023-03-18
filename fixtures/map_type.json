@@ -4,7 +4,10 @@
   "$ref": "#/$defs/MapType",
   "$defs": {
     "MapType": {
-      "type": "object"
+      "type": "object",
+      "attach_data": {
+        "kind": "map"
+      }
     }
   }
 }

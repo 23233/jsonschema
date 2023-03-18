@@ -9,14 +9,20 @@
           "type": "string",
           "maxLength": 50,
           "minLength": 1,
-          "pattern": "[0-9]{1,4}"
+          "pattern": "[0-9]{1,4}",
+          "attach_data": {
+            "kind": "string"
+          }
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "with_pattern"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }

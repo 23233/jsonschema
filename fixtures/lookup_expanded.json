@@ -7,12 +7,18 @@
       "$ref": "https://example.com/schemas/lookup-name"
     },
     "alias": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     }
   },
   "additionalProperties": false,
   "type": "object",
   "required": [
     "name"
-  ]
+  ],
+  "attach_data": {
+    "kind": "struct"
+  }
 }

@@ -7,6 +7,9 @@
       "properties": {
         "value4": {
           "type": "integer",
+          "attach_data": {
+            "kind": "int"
+          },
           "minimum": 0
         }
       },
@@ -14,7 +17,10 @@
       "type": "object",
       "required": [
         "value4"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }

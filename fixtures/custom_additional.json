@@ -6,7 +6,10 @@
     "GrandfatherType": {
       "properties": {
         "family_name": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "ip_addr": {
           "type": "string",
@@ -18,7 +21,10 @@
       "required": [
         "family_name",
         "ip_addr"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }

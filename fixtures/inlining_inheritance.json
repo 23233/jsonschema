@@ -3,13 +3,22 @@
   "$id": "https://github.com/23233/jsonschema/outer",
   "properties": {
     "TextNamed": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     },
     "Text": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     },
     "Foo": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     }
   },
   "additionalProperties": false,
@@ -17,5 +26,8 @@
   "required": [
     "TextNamed",
     "Foo"
-  ]
+  ],
+  "attach_data": {
+    "kind": "struct"
+  }
 }

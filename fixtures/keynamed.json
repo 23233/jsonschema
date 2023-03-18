@@ -6,20 +6,32 @@
     "KeyNamed": {
       "properties": {
         "ThisWasLeftAsIs": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "coming_from_json_tag": {
-          "type": "boolean"
+          "type": "boolean",
+          "attach_data": {
+            "kind": "bool"
+          }
         },
         "nested_not_renamed": {
           "$ref": "#/$defs/KeyNamedNested"
         },
         "✨unicode✨  s̸̥͝h̷̳͒e̴̜̽n̸̡̿a̷̘̔n̷̘͐i̶̫̐ǵ̶̯a̵̘͒n̷̮̾s̸̟̓": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "20.01": {
           "type": "integer",
-          "description": "Description was preserved"
+          "description": "Description was preserved",
+          "attach_data": {
+            "kind": "int"
+          }
         }
       },
       "additionalProperties": false,
@@ -30,15 +42,24 @@
         "nested_not_renamed",
         "✨unicode✨  s̸̥͝h̷̳͒e̴̜̽n̸̡̿a̷̘̔n̷̘͐i̶̫̐ǵ̶̯a̵̘͒n̷̮̾s̸̟̓",
         "20.01"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     },
     "KeyNamedNested": {
       "properties": {
         "nested-renamed-property": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "NotRenamed": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         }
       },
       "additionalProperties": false,
@@ -46,7 +67,10 @@
       "required": [
         "nested-renamed-property",
         "NotRenamed"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }

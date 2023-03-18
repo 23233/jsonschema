@@ -6,20 +6,29 @@
     "RecursiveExample": {
       "properties": {
         "text": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "children": {
           "items": {
             "$ref": "#/$defs/RecursiveExample"
           },
-          "type": "array"
+          "type": "array",
+          "attach_data": {
+            "kind": "slice"
+          }
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "text"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }

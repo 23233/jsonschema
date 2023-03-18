@@ -3,12 +3,18 @@
   "$id": "https://github.com/23233/jsonschema/lookup-name",
   "properties": {
     "surname": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     }
   },
   "additionalProperties": false,
   "type": "object",
   "required": [
     "surname"
-  ]
+  ],
+  "attach_data": {
+    "kind": "struct"
+  }
 }

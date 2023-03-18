@@ -3,15 +3,24 @@
   "$id": "https://github.com/23233/jsonschema/outer-ptr",
   "properties": {
     "Foo": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     },
     "Text": {
-      "type": "string"
+      "type": "string",
+      "attach_data": {
+        "kind": "string"
+      }
     }
   },
   "additionalProperties": false,
   "type": "object",
   "required": [
     "Foo"
-  ]
+  ],
+  "attach_data": {
+    "kind": "struct"
+  }
 }

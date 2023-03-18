@@ -22,10 +22,16 @@
       ],
       "properties": {
         "child1": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "child2": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "child3": {
           "oneOf": [
@@ -35,14 +41,23 @@
             {
               "type": "array"
             }
-          ]
+          ],
+          "attach_data": {
+            "kind": "interface"
+          }
         },
         "child4": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "attach_data": {
+        "kind": "struct"
+      }
     },
     "RootAnyOf": {
       "anyOf": [
@@ -62,10 +77,16 @@
       ],
       "properties": {
         "field1": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "field2": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "field3": {
           "anyOf": [
@@ -75,17 +96,26 @@
             {
               "type": "array"
             }
-          ]
+          ],
+          "attach_data": {
+            "kind": "interface"
+          }
         },
         "field4": {
-          "type": "string"
+          "type": "string",
+          "attach_data": {
+            "kind": "string"
+          }
         },
         "child": {
           "$ref": "#/$defs/ChildAnyOf"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }

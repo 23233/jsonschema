@@ -8,7 +8,10 @@
         "child1": {
           "oneOf": [
             {
-              "type": "string"
+              "type": "string",
+              "attach_data": {
+                "kind": "string"
+              }
             },
             {
               "type": "null"
@@ -20,7 +23,10 @@
       "type": "object",
       "required": [
         "child1"
-      ]
+      ],
+      "attach_data": {
+        "kind": "struct"
+      }
     }
   }
 }
