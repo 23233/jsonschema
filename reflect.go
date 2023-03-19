@@ -22,6 +22,8 @@ import (
 // Version is the JSON Schema version.
 var Version = "https://json-schema.org/draft/2020-12/schema"
 
+type TagMapperFunc func(tagName string, tagValue string, now *Schema, parent *Schema)
+
 // Schema represents a JSON Schema object type.
 // RFC draft-bhutton-json-schema-00 section 4.3
 type Schema struct {
@@ -98,7 +100,7 @@ type Schema struct {
 	Date   *CustomDate            `json:"date,omitempty" bson:"date,omitempty"`     // 日期的定义
 
 	// 额外注入的内容
-	AttachData map[string]interface{} `json:"attach_data,omitempty" bson:"attach_data,omitempty"`
+	MetaData map[string]interface{} `json:"meta_data,omitempty" bson:"meta_data,omitempty"`
 
 	// Special boolean representation of the Schema - section 4.3.2
 	boolean *bool `bson:"boolean,omitempty"`
@@ -237,6 +239,12 @@ type Reflector struct {
 	//
 	// See also: AddGoComments
 	CommentMap map[string]string
+
+	// OpenMetaData 参数用于打开元数据注入 启用后 对于number和int会写入metadata的kind中 为定义的基本类型
+	OpenMetaData bool
+
+	// TagMapper 自定义解析tag对应的处理函数
+	TagMapper map[string]TagMapperFunc
 }
 
 // Reflect reflects to Schema from a value.
@@ -343,6 +351,18 @@ func (r *Reflector) reflectTypeToSchemaWithID(defs Definitions, t reflect.Type) 
 				s.ID = id
 			}
 		}
+
+		if r.OpenMetaData {
+			switch s.Type {
+			case "number", "integer":
+				if s.MetaData == nil {
+					s.MetaData = make(map[string]interface{})
+				}
+				s.MetaData["kind"] = t.Kind().String()
+				break
+			}
+		}
+
 	}
 	return s
 }
@@ -571,6 +591,17 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 
 		property := r.refOrReflectTypeToSchema(definitions, f.Type)
 		property.structKeywordsFromTags(f, st, name)
+
+		// 自定义映射tag处理
+		if r.TagMapper != nil {
+			for key, call := range r.TagMapper {
+				keyTag := f.Tag.Get(key)
+				if len(keyTag) >= 1 {
+					call(key, keyTag, property, st)
+				}
+			}
+		}
+
 		if property.Description == "" {
 			property.Description = r.lookupComment(t, f.Name)
 		}
@@ -687,6 +718,7 @@ func (t *Schema) structKeywordsFromTags(f reflect.StructField, parent *Schema, p
 	}
 	extras := strings.Split(f.Tag.Get("jsonschema_extras"), ",")
 	t.extraKeywords(extras)
+
 }
 
 // read struct tags for generic keyworks
@@ -1150,4 +1182,59 @@ func (r *Reflector) AddGoComments(base, path string) error {
 		r.CommentMap = make(map[string]string)
 	}
 	return ExtractGoComments(base, path, r.CommentMap)
+}
+
+// AddTagSetMapper 新增标签赋值mapper
+// eg: comment="someLike" 设置tagName为comment 设置fieldName为schema中的Title字段 会使用反射进行赋值 最终会设置schema的Title为 someLike
+// 可能的问题 对于struct和slice并未支持 需要自己处理
+func (r *Reflector) AddTagSetMapper(tagName string, fieldName string) {
+	r.AddTagMapper(tagName, func(tagName string, tagValue string, now *Schema, parent *Schema) {
+		switch fieldName {
+		// 预定义一点字段名 不用反射了
+		case "Title":
+			now.Title = tagValue
+		case "Description":
+			now.Description = tagValue
+		default:
+			nowValue := reflect.Indirect(reflect.ValueOf(now))
+			field := nowValue.FieldByName(fieldName)
+			if field.IsValid() && field.CanSet() {
+				// 判断类型
+				switch field.Kind() {
+				// 判断分支只有这几个 因为schema常规字段只定义了这几个类型
+				case reflect.Uint:
+					uValue, err := strconv.ParseUint(tagValue, 10, 0)
+					if err == nil {
+						field.SetUint(uValue)
+					}
+				case reflect.Int:
+					iValue, err := strconv.Atoi(tagValue)
+					if err == nil {
+						field.SetInt(int64(iValue))
+					}
+				case reflect.Bool:
+					switch tagValue {
+					case "1":
+					case "true":
+					case "True":
+						field.SetBool(true)
+					case "0":
+					case "false":
+					case "False":
+						field.SetBool(false)
+					}
+				case reflect.String:
+					field.Set(reflect.ValueOf(tagValue))
+				}
+			}
+		}
+
+	})
+}
+
+func (r *Reflector) AddTagMapper(tagName string, call TagMapperFunc) {
+	if r.TagMapper == nil {
+		r.TagMapper = make(map[string]TagMapperFunc)
+	}
+	r.TagMapper[tagName] = call
 }
