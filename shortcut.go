@@ -42,3 +42,18 @@ func (t *Schema) IsSpread() bool {
 func (t *Schema) IsNormal() bool {
 	return !t.IsObj() && !t.IsArray() && !t.IsNull()
 }
+
+func (t *Schema) AddMeta(key string, value interface{}) {
+	if t.MetaData == nil {
+		t.MetaData = make(map[string]interface{})
+	}
+	t.MetaData[key] = value
+}
+
+func (t *Schema) GetMeta(key string) (interface{}, bool) {
+	if t.MetaData == nil {
+		return nil, false
+	}
+	v, ok := t.MetaData[key]
+	return v, ok
+}
