@@ -245,6 +245,9 @@ type Reflector struct {
 
 	// TagMapper 自定义解析tag对应的处理函数
 	TagMapper map[string]TagMapperFunc
+
+	// DoNotBase64 禁用base64的判断 用于区分定义中的 []uint8和 []byte相同的窘境
+	DoNotBase64 bool
 }
 
 // Reflect reflects to Schema from a value.
@@ -493,7 +496,8 @@ func (r *Reflector) reflectSliceOrArray(definitions Definitions, t reflect.Type,
 		st.MinItems = t.Len()
 		st.MaxItems = st.MinItems
 	}
-	if t.Kind() == reflect.Slice && t.Elem() == byteSliceType.Elem() {
+	// 这里有问题 用[]byte是[]uint8的别名 所以[]uint8会被命中规则 在某些场景不友好
+	if t.Kind() == reflect.Slice && t.Elem() == byteSliceType.Elem() && !r.DoNotBase64 {
 		st.Type = "string"
 		// NOTE: ContentMediaType is not set here
 		st.ContentEncoding = "base64"
