@@ -9,14 +9,13 @@ package jsonschema
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/iancoleman/orderedmap"
 	"net"
 	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/iancoleman/orderedmap"
 )
 
 // Version is the JSON Schema version.
@@ -90,14 +89,10 @@ type Schema struct {
 	WriteOnly   bool          `json:"writeOnly,omitempty" bson:"write_only,omitempty"`    // section 9.4
 	Examples    []interface{} `json:"examples,omitempty" bson:"examples,omitempty"`       // section 9.5
 
-	Extras map[string]interface{} `json:"-" bson:"extras,omitempty"`
+	Extras map[string]interface{} `json:"-"`
 
 	// 自定义ui部分 仅存储 不验证
-	Widget string                 `json:"widget,omitempty" bson:"widget,omitempty"` // ui组件
-	View   *CustomView            `json:"view,omitempty" bson:"view,omitempty"`     // 控制视图
-	T      map[string]interface{} `json:"t,omitempty" bson:"t,omitempty"`           // 用作翻译用
-	TT     string                 `json:"tt,omitempty" bson:"tt,omitempty"`         // 对title进行哪些操作 eg:upper
-	Date   *CustomDate            `json:"date,omitempty" bson:"date,omitempty"`     // 日期的定义
+	Widget string `json:"widget,omitempty" bson:"widget,omitempty"` // ui组件
 
 	// 额外注入的内容
 	MetaData map[string]interface{} `json:"meta_data,omitempty" bson:"meta_data,omitempty"`
@@ -248,6 +243,10 @@ type Reflector struct {
 
 	// DoNotBase64 禁用base64的判断 用于区分定义中的 []uint8和 []byte相同的窘境
 	DoNotBase64 bool
+
+	// Modifier 修改器可以修改最后生成的schema
+	// fieldName 是会在parent的 Properties中 新增的key名称
+	Modifier func(now *Schema, structField reflect.StructField, parent *Schema, fieldName string)
 }
 
 // Reflect reflects to Schema from a value.
@@ -622,6 +621,11 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 					},
 				},
 			}
+		}
+
+		// 判断自定义修改器
+		if r.Modifier != nil {
+			r.Modifier(property, f, st, name)
 		}
 
 		st.Properties.Set(name, property)
@@ -1231,6 +1235,26 @@ func (r *Reflector) AddTagSetMapper(tagName string, fieldName string) {
 					field.Set(reflect.ValueOf(tagValue))
 				}
 			}
+		}
+
+	})
+}
+
+// AddTagSetExtraMapper 设置到extra中 仅在序列化时输出的字段数据
+// 默认多个元素之间的分隔符号为 , 号
+// kv分隔符不能为,号 且必须提供 sep 默认是不报错的 分割符一定要正确
+// eg: extras="field1:abcd,fields2:dbdb" 会附加后成 Extras:{"field1":"abcd","fields2":"dbdb"}
+func (r *Reflector) AddTagSetExtraMapper(tagName string, kvSep string) {
+	r.AddTagMapper(tagName, func(tagName string, tagValue string, now *Schema, parent *Schema) {
+		itemSlice := strings.Split(tagValue, ",")
+		for _, s := range itemSlice {
+			tagSlice := strings.Split(s, kvSep)
+			if len(tagSlice) != 2 {
+				return
+			}
+			name := tagSlice[0]
+			value := tagSlice[1]
+			now.Extras[name] = value
 		}
 
 	})

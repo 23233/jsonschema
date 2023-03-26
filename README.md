@@ -11,3 +11,5 @@
         * comment="someLike" 最终会设置schema的Title为 someLike
         * 是字段名 大写开头
     * 通用方法 `AddTagMapper` 自定义设置tag以及对应的处理方法函数
+* 新增 `Modifier` 方法 可以在最后自定义变更schema的任何数据
+  * 自由且强大 几乎适配所有情况
