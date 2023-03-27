@@ -264,8 +264,10 @@ func (r *Reflector) ReflectFromType(t reflect.Type) *Schema {
 	s.Definitions = definitions
 	bs := r.reflectTypeToSchemaWithID(definitions, t)
 	if r.ExpandedStruct {
+		// 在某些极端条件下 definitions 可能无法获取到对应的值而报错
 		*s = *definitions[name]
 		delete(definitions, name)
+
 	} else {
 		*s = *bs
 	}
