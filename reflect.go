@@ -235,9 +235,6 @@ type Reflector struct {
 	// See also: AddGoComments
 	CommentMap map[string]string
 
-	// OpenMetaData 参数用于打开元数据注入 启用后 对于number和int会写入metadata的kind中 为定义的基本类型
-	OpenMetaData bool
-
 	// TagMapper 自定义解析tag对应的处理函数
 	TagMapper map[string]TagMapperFunc
 
@@ -246,7 +243,7 @@ type Reflector struct {
 
 	// Modifier 修改器可以修改最后生成的schema
 	// fieldName 是会在parent的 Properties中 新增的key名称
-	Modifier func(now *Schema, structField reflect.StructField, parent *Schema, fieldName string)
+	Modifier func(now *Schema, structField reflect.StructField, parent *Schema, parentType reflect.Type, fieldName string)
 }
 
 // Reflect reflects to Schema from a value.
@@ -353,18 +350,6 @@ func (r *Reflector) reflectTypeToSchemaWithID(defs Definitions, t reflect.Type) 
 				s.ID = id
 			}
 		}
-
-		if r.OpenMetaData {
-			switch s.Type {
-			case "number", "integer":
-				if s.MetaData == nil {
-					s.MetaData = make(map[string]interface{})
-				}
-				s.MetaData["kind"] = t.Kind().String()
-				break
-			}
-		}
-
 	}
 	return s
 }
@@ -625,7 +610,7 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 
 		// 判断自定义修改器
 		if r.Modifier != nil {
-			r.Modifier(property, f, st, name)
+			r.Modifier(property, f, st, t, name)
 		}
 
 		st.Properties.Set(name, property)
