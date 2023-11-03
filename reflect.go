@@ -727,6 +727,8 @@ func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName str
 				t.Title = val
 			case "description":
 				t.Description = val
+			case "widget":
+				t.Widget = val
 			case "type":
 				t.Type = val
 			case "anchor":
