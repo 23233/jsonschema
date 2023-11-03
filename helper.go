@@ -10,13 +10,13 @@ import (
 )
 
 type SchemaHelper struct {
-	raw        map[string]interface{}
-	visited    map[*map[string]interface{}]bool
+	raw        map[string]any
+	visited    map[*map[string]any]bool
 	accessKeys []string
 }
 
 // ResolveRef 解析 JSON schema 中的 $ref 引用，返回引用的 JSON 对象
-func (c *SchemaHelper) ResolveRef(ref string) (map[string]interface{}, error) {
+func (c *SchemaHelper) ResolveRef(ref string) (map[string]any, error) {
 	if !strings.HasPrefix(ref, "#") {
 		// 不支持非本地引用
 		return nil, errors.New("不支持非本地引用")
@@ -28,7 +28,7 @@ func (c *SchemaHelper) ResolveRef(ref string) (map[string]interface{}, error) {
 		if _, ok := target[part]; !ok {
 			return nil, errors.New("未找到对应schema")
 		}
-		target = target[part].(map[string]interface{})
+		target = target[part].(map[string]any)
 	}
 	return target, nil
 }
@@ -54,7 +54,7 @@ func (c *SchemaHelper) ToStruct(out any) error {
 	return MapToStruct(c.raw, out)
 }
 
-func (c *SchemaHelper) GetSchemaMapByPointer(schema map[string]interface{}, pointer string) (map[string]interface{}, error) {
+func (c *SchemaHelper) GetSchemaMapByPointer(schema map[string]any, pointer string) (map[string]any, error) {
 	if len(pointer) < 1 {
 		return nil, errors.New("pointer is empty")
 	}
@@ -79,20 +79,20 @@ func (c *SchemaHelper) GetSchemaMapByPointer(schema map[string]interface{}, poin
 		}
 		switch schema["type"] {
 		case "object":
-			properties, ok := schema["properties"].(map[string]interface{})
+			properties, ok := schema["properties"].(map[string]any)
 			if !ok {
 				return nil, errors.New("invalid schema properties")
 			}
 			if _, ok := properties[part]; !ok {
 				return nil, fmt.Errorf("schema properties not has key %s %v", part, schema)
 			}
-			schema = properties[part].(map[string]interface{})
+			schema = properties[part].(map[string]any)
 			break
 		case "array":
-			items, ok := schema["items"].(map[string]interface{})
+			items, ok := schema["items"].(map[string]any)
 			if !ok {
 				// 那可能items是数组
-				itemsArray, ok := schema["items"].([]interface{})
+				itemsArray, ok := schema["items"].([]any)
 				if !ok || len(itemsArray) == 0 {
 					return nil, errors.New("invalid schema items")
 				}
@@ -109,7 +109,7 @@ func (c *SchemaHelper) GetSchemaMapByPointer(schema map[string]interface{}, poin
 				}
 
 				// 获取下标的数据不是一个map 那可能是一个空
-				arrayItem, ok := itemsArray[index].(map[string]interface{})
+				arrayItem, ok := itemsArray[index].(map[string]any)
 				if !ok {
 					return nil, errors.New("invalid JSON pointer, target schema in array but item not a map")
 				}
@@ -135,7 +135,7 @@ func (c *SchemaHelper) GetSchemaMapByPointer(schema map[string]interface{}, poin
 
 }
 
-func (c *SchemaHelper) SchemaRefParse(schema map[string]interface{}) (map[string]interface{}, error) {
+func (c *SchemaHelper) SchemaRefParse(schema map[string]any) (map[string]any, error) {
 
 	// 处理 $ref 引用
 	if _, ok := schema["$ref"]; ok {
@@ -165,7 +165,7 @@ func (c *SchemaHelper) SchemaRefParse(schema map[string]interface{}) (map[string
 }
 
 // 遍历生成accessKey
-func (c *SchemaHelper) traverse(currentSchema map[string]interface{}, currentPath string) error {
+func (c *SchemaHelper) traverse(currentSchema map[string]any, currentPath string) error {
 
 	schema, err := c.SchemaRefParse(currentSchema)
 	if err != nil {
@@ -177,27 +177,27 @@ func (c *SchemaHelper) traverse(currentSchema map[string]interface{}, currentPat
 			c.accessKeys = append(c.accessKeys, currentPath)
 		} else {
 
-			if properties, ok := schema["properties"].(map[string]interface{}); ok {
+			if properties, ok := schema["properties"].(map[string]any); ok {
 				for propertyName, propertySchema := range properties {
 					path := propertyName
 					if currentPath != "" {
 						path = currentPath + "." + propertyName
 					}
-					c.traverse(propertySchema.(map[string]interface{}), path)
+					_ = c.traverse(propertySchema.(map[string]any), path)
 				}
 			}
 		}
 
 	} else if typ == "array" {
-		if items, ok := schema["items"].([]interface{}); ok {
+		if items, ok := schema["items"].([]any); ok {
 			for index, item := range items {
 				path := strconv.Itoa(index)
 				if currentPath != "" {
 					path = currentPath + "." + path
 				}
-				c.traverse(item.(map[string]interface{}), path)
+				_ = c.traverse(item.(map[string]any), path)
 			}
-		} else if itemsSchema, ok := schema["items"].(map[string]interface{}); ok {
+		} else if itemsSchema, ok := schema["items"].(map[string]any); ok {
 
 			itemsSchema, err = c.SchemaRefParse(itemsSchema)
 			if err != nil {
@@ -205,7 +205,7 @@ func (c *SchemaHelper) traverse(currentSchema map[string]interface{}, currentPat
 			}
 
 			if itemsSchema["type"].(string) == "array" || itemsSchema["type"].(string) == "object" {
-				c.traverse(itemsSchema, currentPath+".*")
+				_ = c.traverse(itemsSchema, currentPath+".*")
 			} else {
 				c.accessKeys = append(c.accessKeys, currentPath)
 			}
@@ -223,7 +223,7 @@ func (c *SchemaHelper) GenAccessKeys() []string {
 		return c.accessKeys
 	}
 
-	c.traverse(c.raw, "")
+	_ = c.traverse(c.raw, "")
 
 	if c.accessKeys[0] == "" {
 		c.accessKeys = c.accessKeys[1:]
@@ -234,35 +234,35 @@ func (c *SchemaHelper) GenAccessKeys() []string {
 
 func NewSchemaHelper(input any) *SchemaHelper {
 	var t = new(SchemaHelper)
-	t.SetSchema(input)
-	t.visited = make(map[*map[string]interface{}]bool)
+	_ = t.SetSchema(input)
+	t.visited = make(map[*map[string]any]bool)
 	t.accessKeys = make([]string, 0)
 	return t
 }
 
 // GetSchemaMapByPointer 传入一个被序列化之后的 json schema , 和对应需要获取的pointer , 返回 获取到的schema 或者 error
 // pointer 格式为 /字段1/字段2 或者 #/字段1/字段2
-func GetSchemaMapByPointer(schema map[string]interface{}, pointer string) (map[string]interface{}, error) {
+func GetSchemaMapByPointer(schema map[string]any, pointer string) (map[string]any, error) {
 	var t = NewSchemaHelper(schema)
 	return t.GetSchemaMapByPointer(t.raw, pointer)
 }
 
-func FindDataByAccessKey(data interface{}, accessKey string) interface{} {
+func FindDataByAccessKey(data any, accessKey string) any {
 	keys := strings.Split(accessKey, ".")
 	var currentData = data
 
 	for i := 0; i < len(keys); i++ {
 		key := keys[i]
-		if arrData, ok := currentData.([]interface{}); ok {
+		if arrData, ok := currentData.([]any); ok {
 			// 处理数组
 			if key == "*" {
 				// 获取数组的所有元素
-				var result []interface{}
+				var result []any
 				for j := 0; j < len(arrData); j++ {
 					elem := FindDataByAccessKey(arrData[j], strings.Join(keys[i+1:], "."))
 					if elem != nil {
 						switch e := elem.(type) {
-						case []interface{}:
+						case []any:
 							result = append(result, e...)
 						default:
 							result = append(result, elem)
@@ -277,13 +277,13 @@ func FindDataByAccessKey(data interface{}, accessKey string) interface{} {
 				if index >= len(arrData) {
 					return nil
 				}
-				var result []interface{}
+				var result []any
 				for j := 0; j < len(arrData); j++ {
 					if j == index {
 						elem := FindDataByAccessKey(arrData[j], strings.Join(keys[i+2:], "."))
 						if elem != nil {
 							switch e := elem.(type) {
-							case []interface{}:
+							case []any:
 								result = append(result, e...)
 							default:
 								result = append(result, elem)
@@ -306,20 +306,21 @@ func FindDataByAccessKey(data interface{}, accessKey string) interface{} {
 					return []any{}
 				}
 			}
-		} else if objData, ok := currentData.(map[string]interface{}); ok {
+		} else if objData, ok := currentData.(map[string]any); ok {
 			// 处理对象
 			if key == "*" {
 				// 获取对象的所有值
-				var result []interface{}
+				var result []any
 				for _, value := range objData {
 					elem := FindDataByAccessKey(value, strings.Join(keys[i+1:], "."))
 					if elem != nil {
-						switch elem.(type) {
-						case []interface{}:
-							result = append(result, elem.([]interface{})...)
+						switch t := elem.(type) {
+						case []any:
+							result = append(result, t...) // 直接使用类型断言后的变量 t
 						default:
 							result = append(result, elem)
 						}
+
 					}
 				}
 				return result
@@ -327,24 +328,25 @@ func FindDataByAccessKey(data interface{}, accessKey string) interface{} {
 				// 获取对象的某个值
 				wildcardIndex := strings.Index(key, "*.")
 				objKey := key[wildcardIndex+2:]
-				var result []interface{}
+				var result []any
 				for _, value := range objData {
 					elem := FindDataByAccessKey(value, strings.Join(keys[i+2:], "."))
 					if elem != nil {
-						switch elem.(type) {
-						case map[string]interface{}:
-							if value, exists := elem.(map[string]interface{})[objKey]; exists {
+						switch t := elem.(type) {
+						case map[string]any:
+							if value, exists := t[objKey]; exists {
 								result = append(result, value)
 							}
-						case []interface{}:
-							for _, subElem := range elem.([]interface{}) {
-								if subObjElem, ok := subElem.(map[string]interface{}); ok {
+						case []any:
+							for _, subElem := range t {
+								if subObjElem, ok := subElem.(map[string]any); ok {
 									if value, exists := subObjElem[objKey]; exists {
 										result = append(result, value)
 									}
 								}
 							}
 						}
+
 					}
 				}
 				i += 1
@@ -369,7 +371,7 @@ func StructToMap(in any) (map[string]any, error) {
 	if err != nil {
 		return nil, err
 	}
-	var m map[string]interface{}
+	var m map[string]any
 	err = json.Unmarshal(b, &m)
 	if err != nil {
 		return nil, err
