@@ -82,19 +82,6 @@
         },
         "child": {
           "$ref": "#/$defs/ChildOneOf"
-        },
-        "field6": {
-          "oneOf": [
-            {
-              "$ref": "Outer"
-            },
-            {
-              "$ref": "OuterNamed"
-            },
-            {
-              "$ref": "OuterPtr"
-            }
-          ]
         }
       },
       "additionalProperties": false,

@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/23233/jsonschema/examples"
-	"io/ioutil"
 	"net"
 	"net/url"
 	"os"
@@ -14,9 +13,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-
-	"github.com/iancoleman/orderedmap"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -269,7 +265,7 @@ func (CustomSliceType) JSONSchema() *Schema {
 type CustomMapType map[string]string
 
 func (CustomMapType) JSONSchema() *Schema {
-	properties := orderedmap.New()
+	properties := NewProperties()
 	properties.Set("key", &Schema{
 		Type: "string",
 	})
