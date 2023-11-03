@@ -1,7 +1,5 @@
 package jsonschema
 
-import "github.com/iancoleman/orderedmap"
-
 func NewSchema(types ...string) *Schema {
 	typeName := "string"
 	if len(types) > 0 {
@@ -12,7 +10,7 @@ func NewSchema(types ...string) *Schema {
 	schema.Type = typeName
 
 	if typeName == "object" {
-		schema.Properties = orderedmap.New()
+		schema.Properties = NewProperties()
 	}
 	return schema
 }
